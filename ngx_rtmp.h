@@ -323,6 +323,7 @@ typedef struct ngx_rtmp_core_srv_conf_s {
     ngx_chain_t            *free;
     ngx_chain_t            *free_hs;
     size_t                  max_message;
+    ngx_flag_t              force_ping;
     ngx_flag_t              play_time_fix;
     ngx_flag_t              publish_time_fix;
     ngx_flag_t              busy;

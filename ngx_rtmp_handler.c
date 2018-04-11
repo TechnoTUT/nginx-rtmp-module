@@ -156,8 +156,8 @@ ngx_rtmp_ping(ngx_event_t *pev)
 
     cscf = ngx_rtmp_get_module_srv_conf(s, ngx_rtmp_core_module);
 
-    /* i/o event has happened; no need to ping */
-    if (s->ping_reset) {
+    /* i/o event has happened; no need to ping, unless forced */
+    if (s->ping_reset && !cscf->force_ping) {
         ngx_rtmp_reset_ping(s);
         return;
     }
