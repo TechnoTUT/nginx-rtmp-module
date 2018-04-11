@@ -135,6 +135,14 @@ static ngx_command_t  ngx_rtmp_core_commands[] = {
       offsetof(ngx_rtmp_core_srv_conf_t, busy),
       NULL },
 
+    /* provide a method to force RTMP pings, for whatever reason */
+    { ngx_string("force_ping"),
+      NGX_RTMP_MAIN_CONF|NGX_RTMP_SRV_CONF|NGX_RTMP_APP_CONF|NGX_CONF_TAKE1,
+      ngx_conf_set_flag_slot,
+      NGX_RTMP_SRV_CONF_OFFSET,
+      offsetof(ngx_rtmp_core_srv_conf_t, force_ping),
+      NULL },
+
     /* time fixes are needed for flash clients */
     { ngx_string("play_time_fix"),
       NGX_RTMP_MAIN_CONF|NGX_RTMP_SRV_CONF|NGX_RTMP_APP_CONF|NGX_CONF_TAKE1,
@@ -245,6 +253,7 @@ ngx_rtmp_core_create_srv_conf(ngx_conf_t *cf)
     conf->max_message = NGX_CONF_UNSET_SIZE;
     conf->out_queue = NGX_CONF_UNSET_SIZE;
     conf->out_cork = NGX_CONF_UNSET_SIZE;
+    conf->force_ping = NGX_CONF_UNSET;
     conf->play_time_fix = NGX_CONF_UNSET;
     conf->publish_time_fix = NGX_CONF_UNSET;
     conf->buflen = NGX_CONF_UNSET_MSEC;
@@ -273,6 +282,7 @@ ngx_rtmp_core_merge_srv_conf(ngx_conf_t *cf, void *parent, void *child)
     ngx_conf_merge_size_value(conf->out_queue, prev->out_queue, 256);
     ngx_conf_merge_size_value(conf->out_cork, prev->out_cork,
             conf->out_queue / 8);
+    ngx_conf_merge_value(conf->force_ping, prev->force_ping, 1);
     ngx_conf_merge_value(conf->play_time_fix, prev->play_time_fix, 1);
     ngx_conf_merge_value(conf->publish_time_fix, prev->publish_time_fix, 1);
     ngx_conf_merge_msec_value(conf->buflen, prev->buflen, 1000);
